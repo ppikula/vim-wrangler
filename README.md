@@ -6,9 +6,6 @@ Based on  Pawel 'kTT' Salata <rockplayer.pl@gmail.com> vimerl wrangler branch
 
 ## Configuration
 
-Make sure thath erl_call is in your PATH - it is located in the
-lib/erl_interface-x.x.x/bin/ directory.
-
 Add the following lines to your vimrc file:
 
     "enable wrangler
@@ -28,7 +25,7 @@ Add the following lines to your vimrc file:
 
 ## ToDo
 
-- [ ] automatically find erl_call
+- [x] automatically find erl_call
 - [ ] documentation
 - [ ] create more generic function that will allow to easily bind every wrangler command
 

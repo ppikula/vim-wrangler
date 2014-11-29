@@ -25,11 +25,13 @@ endif
 autocmd VimLeavePre * call StopWranglerServer()
 
 let s:erlangServerName = "wrangler_vim"
+let s:erl_call_finder = expand('<sfile>:p:h') . '/find_erl_call.escript'
+let s:erl_call_cmd = substitute(system(s:erl_call_finder), "\n", '','')
 
 " Starting background erlang session with wrangler on
 function! StartWranglerServer()
     let wranglerEbinDir = g:erlangWranglerPath . "/ebin"
-    let command = "erl_call -s -name " . s:erlangServerName . " -x 'erl -pa " . wranglerEbinDir . "'"
+    let command = s:erl_call_cmd." -s -name " . s:erlangServerName . " -x 'erl -pa " . wranglerEbinDir . "'"
     call system(command)
     call s:send_rpc('application', 'start', '[wrangler]')
 endfunction
@@ -47,7 +49,7 @@ endfunction
 
 " Sending rpc call to erlang session
 function! s:send_rpc(module, fun, args)
-    let command = "erl_call -name " . s:erlangServerName . " -a '" . a:module . " " . a:fun . " " . a:args . "'"
+    let command = s:erl_call_cmd." -name " . s:erlangServerName . " -a '" . a:module . " " . a:fun . " " . a:args . "'"
     let result = system(command)
     if match(result, 'erl_call: failed to connect to node .*') != -1
         call StartWranglerServer()
