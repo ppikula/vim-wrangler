@@ -17,10 +17,26 @@ if !exists('g:erlangWranglerPath')
     let g:erlangWranglerPath = '/Users/pawel.pikula/dev/other/wrangler'
 endif
 
+if( !exists('g:askForSearchPath') )
+    let g:askForSearchPath = 0
+endif
+
 if glob(g:erlangWranglerPath) == ""
     call confirm("Wrong path to wrangler dir")
     finish
 endif
+
+function! s:get_search_path()
+    let path=expand('%:p:h')
+    if !empty(matchstr(path,".*/apps/.*/src$"))
+        let app_path = matchstr(path, ".*/apps/")
+        if empty(app_path)
+            return path
+        else
+            return app_path
+        endif
+    endif
+endfunction
 
 autocmd VimLeavePre * call StopWranglerServer()
 
@@ -238,8 +254,11 @@ endfunction
 
 function! ErlangRename(mode)
     silent w!
-    let search_path = expand("%:p:h")
-    "let search_path = inputdialog('Search path: ', expand("%:p:h"))
+    if g:askForSearchPath
+        let search_path = inputdialog('Search path: ', expand("%:p:h"))
+    else
+        let search_path = s:get_search_path()
+    endif
     let pos = getpos(".")
     let line = pos[1]
     let col = pos[2]
