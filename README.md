@@ -42,6 +42,6 @@ https://github.com/b4winckler/macvim/wiki/Troubleshooting#rename-the-etczshenv-f
 
 - [x] automatically find erl_call
 - [x] discover if the current file is inside `apps/*/src` directory if so pass all apps to wrangler's search path
-- [ ] documentation
 - [ ] create more generic function that will allow to easily bind every wrangler command
+- [ ] vim documentation
 
