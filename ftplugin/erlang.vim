@@ -17,8 +17,8 @@ if !exists('g:erlangWranglerPath')
     let g:erlangWranglerPath = '/Users/pawel.pikula/dev/other/wrangler'
 endif
 
-if( !exists('g:askForSearchPath') )
-    let g:askForSearchPath = 0
+if( !exists('g:askForWranglersSearchPath') )
+    let g:askForWranglersSearchPath = 0
 endif
 
 if glob(g:erlangWranglerPath) == ""
@@ -254,7 +254,7 @@ endfunction
 
 function! ErlangRename(mode)
     silent w!
-    if g:askForSearchPath
+    if g:askForWranglersSearchPath
         let search_path = inputdialog('Search path: ', expand("%:p:h"))
     else
         let search_path = s:get_search_path()
