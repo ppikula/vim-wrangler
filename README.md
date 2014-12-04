@@ -12,13 +12,12 @@ Add the following lines to your vimrc file:
     let g:erlangWranglerPath = '/Users/pawel.pikula/dev/other/wrangler'
 
     "sample wrangler bindings
-    nnoremap <leader>e :call ErlangExtractFunction("n")<ENTER>
-    vnoremap <leader>e :call ErlangExtractFunction("v")<ENTER>
-    noremap  <leader>m :call ErlangRenameModule()<ENTER>
-    noremap  <leader>f :call ErlangRenameFunction()<ENTER>
-    noremap  <leader>v :call ErlangRenameVariable()<ENTER>
-    noremap  <leader>p :call ErlangRenameProcess()<ENTER>
-    noremap  <leader>u :call ErlangUndo()<ENTER>
+    autocmd FileType erlang vnoremap <leader>e :WranglerExtractFunction<ENTER>
+    autocmd FileType erlang noremap  <leader>m :WranglerRenameModule<ENTER>
+    autocmd FileType erlang noremap  <leader>f :WranglerRenameFunction<ENTER>
+    autocmd FileType erlang noremap  <leader>v :WranglerRenameVariable<ENTER>
+    autocmd FileType erlang noremap  <leader>p :WranglerRenameProcess<ENTER>
+    autocmd FileType erlang noremap  <leader>u :WranglerUndo<ENTER>
 
 ## Troubleshooting
 

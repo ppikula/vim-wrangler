@@ -41,6 +41,14 @@ let s:erlangServerName = "wrangler_vim"
 let s:erl_call_finder = expand('<sfile>:p:h') . '/find_erl_call.escript'
 let s:erl_call_cmd = substitute(system(s:erl_call_finder), "\n", '','')
 
+" COMMANDS
+command! -n=0 -range WranglerExtractFunction <line1>,<line2>call ErlangExtractFunction("v")
+command! -n=0 -bar WranglerRenameFunction call ErlangRenameFunction()
+command! -n=0 -bar WranglerRenameModule call ErlangRenameModule()
+command! -n=0 -bar WranglerRenameVariable call ErlangRenameVariable()
+command! -n=0 -bar WranglerRenameProcess call ErlangRenameProcess()
+command! -n=0 -bar WranglerUndo call ErlangUndo()
+
 " Starting background erlang session with wrangler on
 function! StartWranglerServer()
     let wranglerEbinDir = g:erlangWranglerPath . "/ebin"
