@@ -8,9 +8,6 @@ Based on  Pawel 'kTT' Salata <rockplayer.pl@gmail.com> vimerl wrangler branch
 
 Add the following lines to your vimrc file:
 
-    "enable wrangler
-    let g:erlangRefactoring = 1
-
     "set path to wrangler directory
     let g:erlangWranglerPath = '/Users/pawel.pikula/dev/other/wrangler'
 

@@ -3,7 +3,7 @@
 " Language:   Erlang
 " Maintainer: Pawel Pikula <ppikula@gmail.com>
 
-if !exists('g:erlangRefactoring') || g:erlangRefactoring == 0
+if !exists('g:erlangWranglerPath')
     finish
 endif
 
@@ -13,9 +13,6 @@ else
 	let b:did_ftplugin_wrangler = 1
 endif
 
-if !exists('g:erlangWranglerPath')
-    let g:erlangWranglerPath = '/Users/pawel.pikula/dev/other/wrangler'
-endif
 
 if( !exists('g:askForWranglersSearchPath') )
     let g:askForWranglersSearchPath = 0
