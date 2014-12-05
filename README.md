@@ -1,7 +1,7 @@
 # vim-wrangler
 
 The wrangler plugin for Vim.
-Based on  Pawel 'kTT' Salata <rockplayer.pl@gmail.com> vimerl wrangler branch 
+Based on vimerl's wrangler-support branch 
 (https://github.com/jimenezrick/vimerl/tree/wrangler-support).
 
 ## Configuration
@@ -38,6 +38,7 @@ https://github.com/b4winckler/macvim/wiki/Troubleshooting#rename-the-etczshenv-f
 
 - [x] automatically find erl_call
 - [x] discover if the current file is inside `apps/*/src` directory if so pass all apps to wrangler's search path
+- [x] create vim documentation
+- [ ] tests
 - [ ] create more generic function that will allow to easily bind every wrangler command
-- [ ] vim documentation
 

@@ -1,0 +1,73 @@
+vim-wrangler.txt
+
+                       Erlang refactoring tools integration ~
+
+1. Intro                                                vim-wrangler-intro
+2. Options                                              vim-wrangler-options
+3. Commands                                             vim-wrangler-commands
+
+================================================================================
+1. Intro                                                    *vim-wrangler-intro*
+
+Wrangler is an Erlang refactoring tool.  It covers structural changes such as
+renaming of functions, modules and variables or extracting existing code to
+the new function. Wrangler can be used across a whole project. More about
+wrangler: https://github.com/RefactoringTools/wrangler.
+
+The purpose of this plugin is to exploit  power of Wrangler in Vim.  Wrangler
+runs on separate erlang node that is started at the beginning and then reused
+for the subseqent calls. To comunicate with the node plugin uses erl_call
+command which is part of the erl_interface application:
+http://www.erlang.org/doc/man/erl_call.html.
+
+The project started from taking vimerl's wrangler-support branch
+(https://github.com/jimenezrick/vimerl/tree/wrangler-support) that has an old
+version support. The branch is no longer in developement so I decided to write
+my own version that will be working with the latest version of Wrangler.
+
+This extension doesn't include Wrangler. One should install aproperiate version
+of the library and pass the installation path via g:erlangWranglerPath.
+
+================================================================================
+2. Options                                                *vim-wrangler-options*
+
+                                                         *'g:erlangWranglerPath'*
+
+Use this option to pass path to the wrangler directory. Without this variable
+the plugin won't be enabled. It should point at the toplevel directory.  >
+    let g:erlangWranglerPath = '/Users/pawel.pikula/dev/other/wrangler'
+<
+
+================================================================================
+2. Commands                                               *vim-wrangler-commands*
+
+                                                       *:WranglerExtractFunction*
+:WranglerExtractFunction
+   Works only in visual mode. It will create a separate function from the
+   selected block. The new function will appear right after the current
+   function.
+
+                                                          *:WranglerRenameModule*
+:WranglerRenameModule
+    Rename the current module and update all references in other modules.
+
+                                                        *:WranglerRenameFunction*
+:WranglerRenameFunction
+    Rename function under the cursor and update all calls in other
+    modules.
+
+                                                        *:WranglerRenameVariable*
+:WranglerRenameVariable
+    Rename variable under the cursor.
+
+                                                        *:WranglerRenameProcess*
+:WranglerRenameProcess
+   Rename process under the cursor.
+
+                                                                 *:WranglerUndo*
+:WranglerUndo
+   Send rollback request to the wrangler node. Wrangler will redo all changes
+   made in all files. Normal undo will only revert changs in the current file.
+
+================================================================================
+vim:ft=help:et:ts=2:sw=2:sts=2:norl
