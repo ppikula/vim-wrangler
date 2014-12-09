@@ -1,17 +1,32 @@
 require './spec_helper.rb'
 
 describe 'wrangler' do
-  it 'replaces vim with Vim in markdown files' do
-    # Edit temporary markdown file
-    vim.edit!('test.markdown')
-
-    # Insert some text
-    vim.insert('vim is awesome. vim vim vim')
-
-    # Save the file
-    vim.write
-
-    # Make sure vim has been replaced with Vim
-    vim.echo('getline(".")').should eq 'Vim is awesome. Vim Vim Vim'
+  it 'renames erlang module' do
+      vim.edit!('testmod.erl')
+      vim.insert('-module(testmod).')
+      vim.write
+      vim.command(":call AddInput('dupa')")
+      vim.command('WranglerRenameModule')
+      vim.edit!('dupa.erl')
+      vim.echo('getline(".")').should eq '-module(dupa).'
   end
+
+  it 'renames local variable' do
+  end
+
+  it 'renames function variable' do
+  end
+
+  it 'renames private function' do
+  end
+
+  it 'renames exported function' do
+  end
+
+  it 'discovers other apps in current project' do
+  end
+
+  it 'renames process' do
+  end
+
 end

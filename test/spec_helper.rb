@@ -8,11 +8,15 @@ Vimrunner::RSpec.configure do |config|
   plugin_path = File.expand_path('..')
 
   config.start_vim do
-    # Use GVim
+    # Use vim
     vim = Vimrunner.start
 
+    puts plugin_path
+    # Include wrangler path, to check against users installation
+    vim.add_plugin(plugin_path, '/test/wrangler_path.vim')
+
     # Tell Vimrunner to include our plugin
-    vim.add_plugin(plugin_path, '../ftplugin/erlang.vim')
+    vim.add_plugin(plugin_path, '/ftplugin/erlang.vim')
 
     vim
   end
