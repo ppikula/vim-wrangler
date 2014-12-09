@@ -4,6 +4,11 @@ The wrangler plugin for Vim.
 Based on vimerl's wrangler-support branch 
 (https://github.com/jimenezrick/vimerl/tree/wrangler-support).
 
+## Installation
+
+* Copy the files to your ~/.vim directory.
+* If you use vim-pathogen you can clone this repo into ~/.vim/bundle
+
 ## Configuration
 
 Add the following lines to your vimrc file:
