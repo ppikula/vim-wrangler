@@ -175,7 +175,8 @@ function! s:call_rename(mode, line, col, search_path)
         endif
         call s:call_rename_module(name, a:search_path)
     elseif a:mode == "var"
-        let name = inputdialog('Rename '.expand("<cword>").' variable to: ')
+        let curr_name = expand("<cword>")
+        let name = inputdialog('Rename '.curr_name.' variable to: ',curr_name)
         if name == ""
             echo "empty name provided"
             return 0
@@ -190,7 +191,7 @@ function! s:call_rename(mode, line, col, search_path)
         let [error_code, msg] = s:check_for_error(result)
         if  error_code == 0
             let [module, oldname, arity] = split(msg[1:],",")[0:2]
-            let name = inputdialog('Rename "' . expand("<cword>") . '" to: ')
+            let name = inputdialog('Rename "' . expand("<cword>") . '" to: ', oldname)
             if name == ""
                 echo "empty function name"
                 return 0
