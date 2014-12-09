@@ -13,6 +13,9 @@ else
 	let b:did_ftplugin_wrangler = 1
 endif
 
+if exists('*s:call_rename_module')
+    finish
+endif
 
 if( !exists('g:askForWranglersSearchPath') )
     let g:askForWranglersSearchPath = 0
@@ -223,6 +226,7 @@ endfunction
 
 function! s:call_rename_module(newname, search_path)
     let file = expand("%:p")
+    let filepath = expand("%:h")
     let module = "api_wrangler"
     let fun = "rename_mod"
     let args = '["'. file .'",'.a:newname.', ["'. a:search_path .'"] ]'
@@ -233,10 +237,8 @@ function! s:call_rename_module(newname, search_path)
         return 0
     endif
     execute ':bd ' . file
-    execute ':e ' a:search_path."/". a:newname . ".erl"
+    execute ':e '.filepath."/". a:newname . ".erl"
     redraw!
-
-    echo "This files will be changed: " . matchstr(msg, "[^]]*", 1)
     return 1
 endfunction
 
