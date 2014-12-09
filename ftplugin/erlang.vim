@@ -35,6 +35,22 @@ function! s:get_search_path()
     endif
 endfunction
 
+let s:fake_input = []
+function! AddInput(text)
+    call add(s:fake_input, a:text)
+endfunction
+
+" mock input for test purposes
+function! s:get_input(text, initial)
+    if(exists('g:wranglerTestMode'))
+        let val = s:fake_input[0]
+        let s:fake_input = s:fake_input[1:]
+        return val
+    else
+        return inputdialog(a:text, a:initial)
+    endif
+endfunction
+
 autocmd VimLeavePre * call StopWranglerServer()
 
 let s:erlangServerName = "wrangler_vim"
@@ -130,7 +146,7 @@ endfunction
 
 function! ErlangExtractFunction(mode) range
     silent w!
-    let name = inputdialog("New function name: ")
+    let name = s:get_input("New function name: ", "")
     if name != ""
         if a:mode == "v"
             let start_pos = getpos("'<")
@@ -168,7 +184,7 @@ endfunction
 
 function! s:call_rename(mode, line, col, search_path)
     if a:mode == "mod"
-        let name = inputdialog('Rename module to: ')
+        let name = s:get_input('Rename module to: ', '')
         if name == ""
             echo "empty name provided"
             return 0
@@ -176,7 +192,7 @@ function! s:call_rename(mode, line, col, search_path)
         call s:call_rename_module(name, a:search_path)
     elseif a:mode == "var"
         let curr_name = expand("<cword>")
-        let name = inputdialog('Rename '.curr_name.' variable to: ',curr_name)
+        let name = s:get_input('Rename '.curr_name.' variable to: ',curr_name)
         if name == ""
             echo "empty name provided"
             return 0
@@ -191,7 +207,8 @@ function! s:call_rename(mode, line, col, search_path)
         let [error_code, msg] = s:check_for_error(result)
         if  error_code == 0
             let [module, oldname, arity] = split(msg[1:],",")[0:2]
-            let name = inputdialog('Rename "' . expand("<cword>") . '" to: ', oldname)
+            let txt ='Rename "' . expand("<cword>") . '" to: '
+            let name = s:get_input(txt, s:trim(oldname))
             if name == ""
                 echo "empty function name"
                 return 0
@@ -261,7 +278,7 @@ endfunction
 function! ErlangRename(mode)
     silent w!
     if g:askForWranglersSearchPath
-        let search_path = inputdialog('Search path: ', expand("%:p:h"))
+        let search_path = get_input('Search path: ', expand("%:p:h"))
     else
         let search_path = s:get_search_path()
     endif
