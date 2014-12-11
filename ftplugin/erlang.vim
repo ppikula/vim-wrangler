@@ -36,6 +36,7 @@ function! s:get_search_path()
             return app_path
         endif
     endif
+    return path
 endfunction
 
 let s:fake_input = []
@@ -74,6 +75,8 @@ function! StartWranglerServer()
     let command = s:erl_call_cmd." -s -name " . s:erlangServerName . " -x 'erl -pa " . wranglerEbinDir . "'"
     call system(command)
     call s:send_rpc('application', 'start', '[wrangler]')
+    " in thest mode it starts without cwd, thath causes wrnageler crashed
+    call s:send_rpc('file', 'set_cwd', '["/tmp"]')
 endfunction
 
 " Stopping erlang session
@@ -136,7 +139,6 @@ function! s:call_extract(start_line, start_col, end_line, end_col, name)
     let args = '["' . file . '", {' . a:start_line . ', ' . a:start_col . '}, {' . a:end_line . ', ' . a:end_col . '}, "' . a:name . '", emacs, ' . &sw . ']'
     let result = s:send_rpc(module, fun, args)
     let [error_code, msg] = s:check_for_error(result)
-    echom result
     if error_code != 0
         echom "error: ". msg
         return 0
