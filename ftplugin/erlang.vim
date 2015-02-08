@@ -60,6 +60,7 @@ autocmd VimLeavePre * call StopWranglerServer()
 let s:erlangServerName = "wrangler_vim"
 let s:erl_call_finder = expand('<sfile>:p:h') . '/find_erl_call.escript'
 let s:erl_call_cmd = substitute(system(s:erl_call_finder), "\n", '','')
+let s:wrangler_node_started = 0
 
 " COMMANDS
 command! -n=0 -range WranglerExtractFunction <line1>,<line2>call ErlangExtractFunction("v")
@@ -77,11 +78,14 @@ function! StartWranglerServer()
     call s:send_rpc('application', 'start', '[wrangler]')
     " in thest mode it starts without cwd, thath causes wrnageler crashed
     call s:send_rpc('file', 'set_cwd', '["/tmp"]')
+    let s:wrangler_node_started = 1
 endfunction
 
 " Stopping erlang session
 function! StopWranglerServer()
-    echo s:send_rpc('erlang', 'halt', '')
+    if (s:wrangler_node_started == 1)
+        s:send_rpc('erlang', 'halt', '')
+    endif
 endfunction
 
 "undo last operation
