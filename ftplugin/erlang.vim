@@ -68,6 +68,7 @@ command! -n=0 -bar WranglerRenameFunction call ErlangRenameFunction()
 command! -n=0 -bar WranglerRenameModule call ErlangRenameModule()
 command! -n=0 -bar WranglerRenameVariable call ErlangRenameVariable()
 command! -n=0 -bar WranglerRenameProcess call ErlangRenameProcess()
+command! -n=0 -bar WranglerMoveFunction call ErlangMoveFunction()
 command! -n=0 -bar WranglerUndo call ErlangUndo()
 
 " Starting background erlang session with wrangler on
@@ -284,6 +285,46 @@ function! s:call_rename_variable(new_name, line, col, search_path)
     return 1
 endfunction
 
+function! s:call_move_function(line, col, search_path)
+    let file = expand("%:p")
+    let mod = "api_interface"
+    let fun = "pos_to_fun_name"
+    let args = '["'.file.'",{'.a:line.','.a:col.'}]'
+    let result = s:send_rpc(mod,fun,args)
+    let [error_code, msg] = s:check_for_error(result)
+    if  error_code == 0
+        let [module, oldname, arity] = split(msg[1:],",")[0:2]
+        let txt ='Move "' . expand("<cword>") . '" to: '
+        let name = s:get_input(txt,"")
+        if name == ""
+            echo "empty function name"
+            return 0
+        else
+            call s:do_call_move_function(s:trim(oldname), s:trim(arity), name, a:search_path)
+        endif
+    else
+        return 0
+    endif
+    endfunction
+
+function! s:do_call_move_function(old_name, arity, new_name, search_path)
+    let file = expand("%:p")
+    let module = "api_wrangler"
+    let fun = "move_fun"
+    let args = '["'. file .'",'.a:old_name.','.a:arity.','.a:new_name.', ["'. a:search_path .'"] ]'
+    let result = s:send_rpc(module, fun, args)
+    echo result
+    let [error_code, msg] = s:check_for_error(result)
+    if error_code != 0
+        echo msg
+        return 0
+    endif
+    execute 'e %'
+    redraw!
+
+    return 1
+endfunction
+
 function! ErlangRename(mode)
     silent w!
     if g:askForWranglersSearchPath
@@ -294,8 +335,6 @@ function! ErlangRename(mode)
     let pos = getpos(".")
     let line = pos[1]
     let col = pos[2]
-    let current_filename = expand("%")
-    let current_filepath = expand("%:p")
     call s:call_rename(a:mode, line, col, search_path)
 endfunction
 
@@ -313,6 +352,19 @@ endfunction
 
 function! ErlangRenameProcess()
     call ErlangRename("process")
+endfunction
+
+function! ErlangMoveFunction()
+    silent w!
+    if g:askForWranglersSearchPath
+        let search_path = get_input('Search path: ', expand("%:p:h"))
+    else
+        let search_path = s:get_search_path()
+    endif
+    let pos = getpos(".")
+    let line = pos[1]
+    let col = pos[2]
+    call s:call_move_function(line, col, search_path)
 endfunction
 
 " vim: set foldmethod=marker:

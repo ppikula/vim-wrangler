@@ -60,6 +60,47 @@ describe 'wrangler' do
       expect(vim.echo('getline(5)')).to eq "public_rename(G) -> ok."
   end
 
+  it 'moves private function to different module' do
+      vim.edit!('pm2.erl')
+      vim.insert "-module(pm2)."
+      vim.write
+
+      vim.edit!('pm1.erl')
+      vim.insert "-module(pm2).\n\n"
+      vim.insert "private_f(G) -> ok.\n"
+      vim.write
+      vim.normal ':3<CR>'
+      vim.command(":call AddInput('pm2')")
+      vim.command('WranglerMoveFunction')
+
+      expect(vim.echo('getline(3)')).to eq ""
+
+      vim.edit!("pm2.erl")
+      expect(vim.echo('getline(4)')).to eq "private_f(G) -> ok."
+  end
+
+  it 'moves public function to different module' do
+      vim.edit!('m2.erl')
+      vim.insert "-module(m2)."
+      vim.write
+
+      vim.edit!('m1.erl')
+      vim.insert "-module(m2).\n\n"
+      vim.insert "-export([publicf/1]).\n\n"
+      vim.insert "publicf(G) -> ok.\n"
+      vim.write
+      vim.normal ':5<CR>'
+      vim.command(":call AddInput('m2')")
+      vim.command('WranglerMoveFunction')
+
+      expect(vim.echo('getline(3)')).to eq ""
+      expect(vim.echo('getline(5)')).to eq ""
+
+      vim.edit!("m2.erl")
+      expect(vim.echo('getline(4)')).to eq "-export([publicf/1])."
+      expect(vim.echo('getline(6)')).to eq "publicf(G) -> ok."
+  end
+
   it 'discovers other apps in current project' do
       Dir.mkdir("apps") unless File.exists?("apps")
       # create first app
