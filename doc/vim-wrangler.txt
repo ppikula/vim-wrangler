@@ -64,6 +64,11 @@ the plugin won't be enabled. It should point at the toplevel directory.  >
 :WranglerRenameProcess
    Rename process under the cursor.
 
+                                                        *:WranglerMoveFunction*
+:WranglerMoveFunction
+    Move function under the cursor and update all calls in other
+    modules.
+
                                                                  *:WranglerUndo*
 :WranglerUndo
    Send rollback request to the wrangler node. Wrangler will redo all changes

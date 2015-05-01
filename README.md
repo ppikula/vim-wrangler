@@ -1,7 +1,7 @@
 # vim-wrangler
 
 The wrangler plugin for Vim.
-Based on vimerl's wrangler-support branch 
+Based on vimerl's wrangler-support branch
 (https://github.com/jimenezrick/vimerl/tree/wrangler-support).
 
 ## Installation
@@ -22,6 +22,7 @@ Add the following lines to your vimrc file:
     autocmd FileType erlang noremap  <leader>f :WranglerRenameFunction<ENTER>
     autocmd FileType erlang noremap  <leader>v :WranglerRenameVariable<ENTER>
     autocmd FileType erlang noremap  <leader>p :WranglerRenameProcess<ENTER>
+    autocmd FileType erlang noremap  <leader>mv :WranglerMoveFunction<ENTER>
     autocmd FileType erlang noremap  <leader>u :WranglerUndo<ENTER>
 
 ## Troubleshooting
