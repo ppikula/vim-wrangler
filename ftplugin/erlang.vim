@@ -84,7 +84,8 @@ endfunction
 " Stopping erlang session
 function! StopWranglerServer()
     if (s:wrangler_node_started == 1)
-        s:send_rpc('erlang', 'halt', '')
+        let command = s:erl_call_cmd." -name " . s:erlangServerName . " -a 'erlang halt'"
+        system(command)
     endif
 endfunction
 
