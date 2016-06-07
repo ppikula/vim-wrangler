@@ -269,9 +269,9 @@ endfunction
 
 function! s:call_rename_variable(new_name, line, col, search_path)
     let file = expand("%:p")
-    let module = "api_wrangler"
+    let module = "refac_rename_var"
     let fun = "rename_var"
-    let args = '["'. file .'",'.a:line.','.a:col.',"'.a:new_name.'", ["'. a:search_path .'"] ]'
+    let args = '["'. file .'",'.a:line.','.a:col.',"'.a:new_name.'", ["'. a:search_path .'"], command, 8 ]'
     let result = s:send_rpc(module, fun, args)
 
     let [error_code, msg] = s:check_for_error(result)
