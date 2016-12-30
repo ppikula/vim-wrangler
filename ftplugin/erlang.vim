@@ -86,7 +86,7 @@ endfunction
 function! StopWranglerServer()
     if (s:wrangler_node_started == 1)
         let command = s:erl_call_cmd." -sname " . s:erlangServerName . " -a 'erlang halt'"
-        system(command)
+        call system(command)
     endif
 endfunction
 
