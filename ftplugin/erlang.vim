@@ -74,7 +74,7 @@ command! -n=0 -bar WranglerUndo call ErlangUndo()
 " Starting background erlang session with wrangler on
 function! StartWranglerServer()
     let wranglerEbinDir = g:erlangWranglerPath . "/ebin"
-    let command = s:erl_call_cmd." -s -name " . s:erlangServerName . " -x 'erl -pa " . wranglerEbinDir . "'"
+    let command = s:erl_call_cmd." -s -sname " . s:erlangServerName . " -x 'erl -pa " . wranglerEbinDir . "'"
     call system(command)
     call s:send_rpc('application', 'start', '[wrangler]')
     " in thest mode it starts without cwd, thath causes wrnageler crashed
@@ -85,7 +85,7 @@ endfunction
 " Stopping erlang session
 function! StopWranglerServer()
     if (s:wrangler_node_started == 1)
-        let command = s:erl_call_cmd." -name " . s:erlangServerName . " -a 'erlang halt'"
+        let command = s:erl_call_cmd." -sname " . s:erlangServerName . " -a 'erlang halt'"
         system(command)
     endif
 endfunction
@@ -98,7 +98,7 @@ endfunction
 
 " Sending rpc call to erlang session
 function! s:send_rpc(module, fun, args)
-    let command = s:erl_call_cmd." -name " . s:erlangServerName . " -a '" . a:module . " " . a:fun . " " . a:args . "'"
+    let command = s:erl_call_cmd." -sname " . s:erlangServerName . " -a '" . a:module . " " . a:fun . " " . a:args . "'"
     let result = system(command)
     if match(result, 'erl_call: failed to connect to node .*') != -1
         call StartWranglerServer()
